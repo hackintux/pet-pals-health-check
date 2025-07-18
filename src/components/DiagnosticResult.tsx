@@ -174,26 +174,35 @@ export const DiagnosticResult = ({ result, profile, onRestart }: DiagnosticResul
           <CardTitle>Ressources utiles</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+          <a
+            href="https://extranet.veterinaire.fr/annuaires/veterinaires"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition"
+          >
             <span className="text-sm font-medium">Trouver un vétérinaire proche</span>
-            <Button variant="ghost" size="sm">
-              <ExternalLink className="h-4 w-4" />
-            </Button>
-          </div>
-          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+            <ExternalLink className="h-4 w-4 text-primary" />
+          </a>
+          <a
+            href="tel:3115"
+            className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition"
+          >
             <span className="text-sm font-medium">Urgences vétérinaires 24h/24</span>
-            <Button variant="ghost" size="sm">
-              <Phone className="h-4 w-4" />
-            </Button>
-          </div>
-          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+            <Phone className="h-4 w-4 text-danger" />
+          </a>
+          <a
+            href="https://www.maxizoo.fr/c/vet-regime/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition"
+          >
             <span className="text-sm font-medium">Conseils nutrition et soins</span>
-            <Button variant="ghost" size="sm">
-              <ExternalLink className="h-4 w-4" />
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+            <ExternalLink className="h-4 w-4 text-primary" />
+          </a>
+
+  </CardContent>
+</Card>
+
 
       {/* Actions */}
       <div className="flex justify-center pt-6">
