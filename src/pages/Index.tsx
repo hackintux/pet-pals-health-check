@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AnimalProfile as AnimalProfileComponent } from '@/components/AnimalProfile';
 import { Questionnaire } from '@/components/Questionnaire';
 import { DiagnosticResult as DiagnosticResultComponent } from '@/components/DiagnosticResult';
+import { Footer } from '@/components/Footer';
 import { AnimalProfile, Answer, DiagnosticResult } from '@/types/vetocheck';
 import { calculateDiagnostic } from '@/utils/diagnostic';
 
@@ -32,25 +33,29 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/10">
-      {currentStep === 'profile' && (
-        <AnimalProfileComponent onProfileComplete={handleProfileComplete} />
-      )}
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/10 flex flex-col">
+      <div className="flex-1">
+        {currentStep === 'profile' && (
+          <AnimalProfileComponent onProfileComplete={handleProfileComplete} />
+        )}
+        
+        {currentStep === 'questionnaire' && animalProfile && (
+          <Questionnaire 
+            profile={animalProfile} 
+            onComplete={handleQuestionnaireComplete} 
+          />
+        )}
+        
+        {currentStep === 'result' && animalProfile && diagnosticResult && (
+          <DiagnosticResultComponent 
+            result={diagnosticResult} 
+            profile={animalProfile} 
+            onRestart={handleRestart} 
+          />
+        )}
+      </div>
       
-      {currentStep === 'questionnaire' && animalProfile && (
-        <Questionnaire 
-          profile={animalProfile} 
-          onComplete={handleQuestionnaireComplete} 
-        />
-      )}
-      
-      {currentStep === 'result' && animalProfile && diagnosticResult && (
-        <DiagnosticResultComponent 
-          result={diagnosticResult} 
-          profile={animalProfile} 
-          onRestart={handleRestart} 
-        />
-      )}
+      <Footer />
     </div>
   );
 };
