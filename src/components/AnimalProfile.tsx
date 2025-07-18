@@ -13,7 +13,10 @@ interface AnimalProfileProps {
 }
 
 export const AnimalProfile = ({ onProfileComplete }: AnimalProfileProps) => {
-  const [profile, setProfile] = useState<Partial<AnimalProfileType>>({});
+  const [profile, setProfile] = useState<Partial<AnimalProfileType>>({
+    isNeutered: false,
+    isOverweight: false
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
