@@ -17,12 +17,31 @@ export const AnimalProfile = ({ onProfileComplete }: AnimalProfileProps) => {
     isNeutered: false,
     isOverweight: false
   });
+  const [ageUnit, setAgeUnit] = useState<'mois' | 'années'>('mois');
+  const [ageValue, setAgeValue] = useState<number>(0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isProfileComplete()) {
-      onProfileComplete(profile as AnimalProfileType);
+      // Convertir l'âge en mois si nécessaire
+      const ageInMonths = ageUnit === 'années' ? ageValue * 12 : ageValue;
+      const finalProfile = { ...profile, age: ageInMonths } as AnimalProfileType;
+      onProfileComplete(finalProfile);
     }
+  };
+
+  const handleAgeChange = (value: number) => {
+    setAgeValue(value);
+    // Convertir en mois pour le profil
+    const ageInMonths = ageUnit === 'années' ? value * 12 : value;
+    setProfile({ ...profile, age: ageInMonths });
+  };
+
+  const handleUnitChange = (unit: 'mois' | 'années') => {
+    setAgeUnit(unit);
+    // Reconvertir la valeur actuelle avec la nouvelle unité
+    const ageInMonths = unit === 'années' ? ageValue * 12 : ageValue;
+    setProfile({ ...profile, age: ageInMonths });
   };
 
   const isProfileComplete = () => {
@@ -86,17 +105,32 @@ export const AnimalProfile = ({ onProfileComplete }: AnimalProfileProps) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="age">Âge (en mois)</Label>
-                <Input
-                  id="age"
-                  type="number"
-                  min="1"
-                  max="300"
-                  value={profile.age || ''}
-                  onChange={(e) => setProfile({ ...profile, age: parseInt(e.target.value) || 0 })}
-                  placeholder="Ex: 24"
-                  required
-                />
+                <Label htmlFor="age">Âge</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="age"
+                    type="number"
+                    min="1"
+                    max={ageUnit === 'années' ? "25" : "300"}
+                    value={ageValue || ''}
+                    onChange={(e) => handleAgeChange(parseInt(e.target.value) || 0)}
+                    placeholder={ageUnit === 'années' ? "Ex: 2" : "Ex: 24"}
+                    className="flex-1"
+                    required
+                  />
+                  <Select 
+                    value={ageUnit} 
+                    onValueChange={handleUnitChange}
+                  >
+                    <SelectTrigger className="w-24">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="mois">mois</SelectItem>
+                      <SelectItem value="années">ans</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 
