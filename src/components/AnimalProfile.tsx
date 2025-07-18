@@ -58,7 +58,11 @@ export const AnimalProfile = ({ onProfileComplete }: AnimalProfileProps) => {
       <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-3 mb-4">
           <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-            <Heart className="h-6 w-6 text-primary" />
+            <img 
+              src="/lovable-uploads/c4b2f9a1-854c-4005-85f9-12f9848809c5.png" 
+              alt="VetoCheck Logo" 
+              className="h-8 w-8 object-contain"
+            />
           </div>
           <h1 className="text-3xl font-bold text-primary">VetoCheck</h1>
         </div>
