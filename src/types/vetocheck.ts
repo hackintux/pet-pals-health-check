@@ -44,3 +44,9 @@ export interface QuestionCategory {
   name: string;
   questions: Question[];
 }
+
+export interface Feedback {
+  name: string;
+  rating: number; // 1-5
+  comment?: string;
+}

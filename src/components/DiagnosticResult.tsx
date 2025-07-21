@@ -10,8 +10,11 @@ import {
   Phone, 
   Heart,
   RotateCcw,
-  ExternalLink
+  ExternalLink,
+  Star
 } from 'lucide-react';
+import { useState } from 'react';
+import { FeedbackModal } from './FeedbackModal';
 
 interface DiagnosticResultProps {
   result: DiagnosticResultType;
@@ -20,6 +23,8 @@ interface DiagnosticResultProps {
 }
 
 export const DiagnosticResult = ({ result, profile, onRestart }: DiagnosticResultProps) => {
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
+
   const getRiskLevelConfig = () => {
     switch (result.riskLevel) {
       case 'green':
@@ -168,7 +173,7 @@ export const DiagnosticResult = ({ result, profile, onRestart }: DiagnosticResul
         </Card>
       )}
 
-      {/* Liens et ressources */}
+      {/* Ressources utiles */}
       <Card>
         <CardHeader>
           <CardTitle>Ressources utiles</CardTitle>
@@ -199,18 +204,29 @@ export const DiagnosticResult = ({ result, profile, onRestart }: DiagnosticResul
             <span className="text-sm font-medium">Conseils nutrition et soins</span>
             <ExternalLink className="h-4 w-4 text-primary" />
           </a>
-
-  </CardContent>
-</Card>
-
+        </CardContent>
+      </Card>
 
       {/* Actions */}
-      <div className="flex justify-center pt-6">
+      <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-6">
         <Button onClick={onRestart} variant="outline" className="gap-2">
           <RotateCcw className="h-4 w-4" />
           Nouveau diagnostic
         </Button>
+        <Button 
+          onClick={() => setFeedbackModalOpen(true)} 
+          variant="default" 
+          className="gap-2"
+        >
+          <Star className="h-4 w-4" />
+          Donnez votre avis
+        </Button>
       </div>
+
+      <FeedbackModal 
+        open={feedbackModalOpen} 
+        onOpenChange={setFeedbackModalOpen} 
+      />
     </div>
   );
 };
