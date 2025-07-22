@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Feedback } from '@/types/vetocheck';
+import { saveFeedback } from '@/utils/feedback';
 
 interface FeedbackModalProps {
   open: boolean;
@@ -41,7 +42,8 @@ export const FeedbackModal = ({ open, onOpenChange }: FeedbackModalProps) => {
         comment: comment.trim() || undefined
       };
       
-      console.log('Feedback submitted:', feedback);
+      // Save feedback to localStorage
+      saveFeedback(feedback);
       
       toast({
         title: "Merci pour votre avis !",

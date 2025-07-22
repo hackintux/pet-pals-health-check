@@ -12,7 +12,16 @@ export const Footer = () => {
             <span className="font-semibold text-primary">VetoCheck</span>
           </div>
           
-          <div className="space-y-2 text-sm text-muted-foreground">
+          <div className="space-y-3 text-sm text-muted-foreground">
+            <div className="flex items-center justify-center gap-4 flex-wrap">
+              <a 
+                href="/avis" 
+                className="text-primary hover:text-primary-dark transition-colors font-medium underline-offset-4 hover:underline"
+              >
+                Voir les avis
+              </a>
+            </div>
+            
             <p>
               © 2024 VetoCheck. Tous droits réservés.
             </p>
