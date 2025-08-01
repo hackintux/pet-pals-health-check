@@ -1,21 +1,43 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { FeedbackCard } from './FeedbackCard';
-import { getFeedbacks, getFeedbackStats } from '@/utils/feedback';
+import { getFeedbacks, getFeedbackStats, FeedbackWithDate, FeedbackStats } from '@/utils/feedback';
 import { useNavigate } from 'react-router-dom';
 
 export const FeedbackList = () => {
   const navigate = useNavigate();
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
+  const [feedbacks, setFeedbacks] = useState<FeedbackWithDate[]>([]);
+  const [stats, setStats] = useState<FeedbackStats>({
+    totalFeedbacks: 0,
+    averageRating: 0,
+    ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+  });
+  const [loading, setLoading] = useState(true);
   
-  const feedbacks = useMemo(() => getFeedbacks(), []);
-  const stats = useMemo(() => getFeedbackStats(), [feedbacks]);
+  useEffect(() => {
+    const loadFeedbacks = async () => {
+      try {
+        const [feedbacksData, statsData] = await Promise.all([
+          getFeedbacks(),
+          getFeedbackStats()
+        ]);
+        setFeedbacks(feedbacksData);
+        setStats(statsData);
+      } catch (error) {
+        console.error('Error loading feedbacks:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadFeedbacks();
+  }, []);
   
-  const filteredFeedbacks = useMemo(() => {
-    if (selectedRating === null) return feedbacks;
-    return feedbacks.filter(feedback => feedback.rating === selectedRating);
-  }, [feedbacks, selectedRating]);
+  const filteredFeedbacks = selectedRating === null 
+    ? feedbacks 
+    : feedbacks.filter(feedback => feedback.rating === selectedRating);
 
   const renderStatsPaws = (rating: number) => {
     return (
@@ -35,6 +57,21 @@ export const FeedbackList = () => {
       </div>
     );
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        <Card className="text-center py-12">
+          <CardContent>
+            <div className="space-y-6">
+              <div className="text-6xl">🐾</div>
+              <p className="text-muted-foreground">Chargement des avis...</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (feedbacks.length === 0) {
     return (

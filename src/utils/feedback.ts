@@ -1,36 +1,44 @@
 import { Feedback } from '@/types/vetocheck';
+import { supabase } from '@/lib/supabase';
 
 export interface FeedbackWithDate extends Feedback {
   id: string;
   createdAt: string;
 }
 
-const FEEDBACK_STORAGE_KEY = 'vetocheck-feedbacks';
-
-export const saveFeedback = (feedback: Feedback): void => {
+export const saveFeedback = async (feedback: Feedback): Promise<void> => {
   try {
-    const existingFeedbacks = getFeedbacks();
-    const newFeedback: FeedbackWithDate = {
-      ...feedback,
-      id: Date.now().toString(),
-      createdAt: new Date().toISOString(),
-    };
-    
-    const updatedFeedbacks = [newFeedback, ...existingFeedbacks];
-    localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(updatedFeedbacks));
+    const { error } = await supabase
+      .from('feedbacks')
+      .insert({
+        name: feedback.name,
+        rating: feedback.rating,
+        comment: feedback.comment || null,
+      });
+
+    if (error) throw error;
   } catch (error) {
     console.error('Error saving feedback:', error);
+    throw error;
   }
 };
 
-export const getFeedbacks = (): FeedbackWithDate[] => {
+export const getFeedbacks = async (): Promise<FeedbackWithDate[]> => {
   try {
-    const stored = localStorage.getItem(FEEDBACK_STORAGE_KEY);
-    if (!stored) return [];
-    
-    const feedbacks = JSON.parse(stored) as FeedbackWithDate[];
-    // Sort by date (most recent first)
-    return feedbacks.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    const { data, error } = await supabase
+      .from('feedbacks')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    return (data || []).map(row => ({
+      id: row.id,
+      name: row.name,
+      rating: row.rating,
+      comment: row.comment,
+      createdAt: row.created_at,
+    }));
   } catch (error) {
     console.error('Error getting feedbacks:', error);
     return [];
@@ -43,8 +51,8 @@ export interface FeedbackStats {
   ratingDistribution: { [key: number]: number };
 }
 
-export const getFeedbackStats = (): FeedbackStats => {
-  const feedbacks = getFeedbacks();
+export const getFeedbackStats = async (): Promise<FeedbackStats> => {
+  const feedbacks = await getFeedbacks();
   
   if (feedbacks.length === 0) {
     return {

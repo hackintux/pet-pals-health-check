@@ -34,16 +34,14 @@ export const FeedbackModal = ({ open, onOpenChange }: FeedbackModalProps) => {
     
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
       const feedback: Feedback = {
         name: name.trim(),
         rating,
         comment: comment.trim() || undefined
       };
       
-      // Save feedback to localStorage
-      saveFeedback(feedback);
+      await saveFeedback(feedback);
       
       toast({
         title: "Merci pour votre avis !",
@@ -51,9 +49,16 @@ export const FeedbackModal = ({ open, onOpenChange }: FeedbackModalProps) => {
       });
       
       resetForm();
-      setIsSubmitting(false);
       onOpenChange(false);
-    }, 1000);
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible d'enregistrer votre avis. Veuillez réessayer.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleClose = () => {
