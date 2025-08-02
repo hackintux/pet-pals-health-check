@@ -1,5 +1,5 @@
 import { Feedback } from '@/types/vetocheck';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface FeedbackWithDate extends Feedback {
   id: string;
