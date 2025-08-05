@@ -305,13 +305,22 @@ export const questionCategories: QuestionCategory[] = [
         category: 'urgence',
         text: 'Son ventre est-il gonflé et dur ?',
         weight: 9,
-        isCritical: true
+        isCritical: true,
+        species: ['chien'] // Plus fréquent chez les chiens
       },
       {
         id: 'urgence_4',
         category: 'urgence',
         text: 'Sa température corporelle vous semble-t-elle très élevée ?',
         weight: 7
+      },
+      {
+        id: 'urgence_5',
+        category: 'urgence',
+        text: 'A-t-il des difficultés à uriner ou défaut d\'urination ?',
+        weight: 9,
+        isCritical: true,
+        species: ['chat'] // Obstruction urinaire plus fréquente chez les chats mâles
       }
     ]
   }
@@ -319,4 +328,26 @@ export const questionCategories: QuestionCategory[] = [
 
 export const getAllQuestions = (): Question[] => {
   return questionCategories.flatMap(category => category.questions);
+};
+
+export const getFilteredQuestions = (species: 'chien' | 'chat'): Question[] => {
+  return questionCategories.flatMap(category => 
+    category.questions.filter(question => 
+      !question.species || question.species.includes(species)
+    )
+  );
+};
+
+export const getConfirmationQuestions = (): { [key: string]: string } => {
+  return {
+    'digestion_4': 'Depuis combien de temps observez-vous du sang ?',
+    'respiration_1': 'Depuis quand sa respiration est-elle difficile ?',
+    'respiration_4': 'Quand avez-vous remarqué cette coloration ?',
+    'urgence_1': 'À quel moment cela s\'est-il produit ?',
+    'urgence_2': 'Où se situe le saignement principal ?',
+    'urgence_3': 'Depuis combien de temps son ventre est-il ainsi ?',
+    'urgence_5': 'Depuis quand a-t-il ces difficultés ?',
+    'hydratation_4': 'Depuis combien de temps y a-t-il du sang ?',
+    'locomotion_4': 'Depuis quand ne peut-il plus se déplacer ?'
+  };
 };

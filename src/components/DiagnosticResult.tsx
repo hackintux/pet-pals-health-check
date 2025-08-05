@@ -164,6 +164,59 @@ export const DiagnosticResult = ({ result, profile, onRestart }: DiagnosticResul
         </CardContent>
       </Card>
 
+      {/* Patterns dangereux détectés */}
+      {result.dangerousPatterns.length > 0 && (
+        <Card className="bg-danger/10 border-danger/20 border">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-danger">
+              <AlertTriangle className="h-5 w-5" />
+              Combinaisons de symptômes à surveiller
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {result.dangerousPatterns.map((pattern, index) => (
+                <div key={index} className="p-4 bg-danger/5 rounded-lg border border-danger/10">
+                  <h4 className="font-bold text-danger mb-2">{pattern.name}</h4>
+                  <p className="text-sm text-danger/80 mb-3">{pattern.description}</p>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="destructive" className="text-xs">
+                      {pattern.urgencyLevel === 'immediate' ? 'IMMÉDIAT' : 
+                       pattern.urgencyLevel === 'urgent' ? 'URGENT' : 'BIENTÔT'}
+                    </Badge>
+                    <span className="text-xs text-danger/60">
+                      Symptômes: {pattern.symptoms.join(', ')}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Actions de suivi */}
+      {result.followUpActions.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-primary" />
+              Actions à réaliser maintenant
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-3">
+              {result.followUpActions.map((action, index) => (
+                <div key={index} className="flex items-start gap-3 p-3 bg-primary/5 rounded-lg border border-primary/10">
+                  <span className="text-primary mt-1">📋</span>
+                  <span className="text-sm font-medium">{action}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Message de stérilisation */}
       {result.sterilizationMessage && (
         <Card className="bg-primary/10 border-primary/20 border">

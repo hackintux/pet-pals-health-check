@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AnimalProfile as AnimalProfileComponent } from '@/components/AnimalProfile';
-import { Questionnaire } from '@/components/Questionnaire';
+import { EnhancedQuestionnaire } from '@/components/EnhancedQuestionnaire';
 import { DiagnosticResult as DiagnosticResultComponent } from '@/components/DiagnosticResult';
 import { Footer } from '@/components/Footer';
 import { AnimalProfile, Answer, DiagnosticResult } from '@/types/vetocheck';
@@ -40,7 +40,7 @@ const Index = () => {
         )}
         
         {currentStep === 'questionnaire' && animalProfile && (
-          <Questionnaire 
+          <EnhancedQuestionnaire 
             profile={animalProfile} 
             onComplete={handleQuestionnaireComplete} 
           />
