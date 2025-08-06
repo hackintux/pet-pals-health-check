@@ -58,111 +58,117 @@ export const DiagnosticResult = ({ result, profile, onRestart }: DiagnosticResul
   const IconComponent = config.icon;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-primary mb-2">
-          Résultat du diagnostic pour {profile.name}
-        </h1>
-        <p className="text-muted-foreground">
-          {profile.species === 'chien' ? '🐕' : '🐱'} {profile.gender === 'male' ? 'Mâle' : 'Femelle'} • {profile.age} mois
-        </p>
+    <div className="min-h-screen">
+      {/* Header mobile-optimized */}
+      <div className="sticky top-0 bg-background/95 backdrop-blur-sm border-b px-4 py-3 z-50">
+        <div className="text-center">
+          <h1 className="text-lg font-bold text-primary">
+            Résultat - {profile.name}
+          </h1>
+          <p className="text-xs text-muted-foreground">
+            {profile.species === 'chien' ? '🐕' : '🐱'} {profile.gender === 'male' ? 'Mâle' : 'Femelle'} • {profile.age} mois
+          </p>
+        </div>
       </div>
 
-      {/* Alerte d'urgence */}
-      {result.emergencyAlert && (
-        <Card className={`${config.bgColor} ${config.borderColor} border-2`}>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3 mb-4">
-              <AlertTriangle className="h-6 w-6 text-danger" />
-              <span className="text-lg font-bold text-danger">URGENCE</span>
-            </div>
-            <p className="text-base mb-4">{result.emergencyAlert}</p>
-            {result.riskLevel === 'red' && result.criticalSymptoms.length > 0 && (
-              <div className="flex items-center gap-2 p-3 bg-danger/5 rounded-lg">
-                <Phone className="h-4 w-4 text-danger" />
-                <span className="font-medium text-danger">
-                  Urgences vétérinaires : 3115
-                </span>
+      {/* Content container */}
+      <div className="p-4 max-w-lg mx-auto w-full space-y-4">
+
+        {/* Alerte d'urgence */}
+        {result.emergencyAlert && (
+          <Card className={`${config.bgColor} ${config.borderColor} border-2 shadow-sm`}>
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-2 mb-3">
+                <AlertTriangle className="h-5 w-5 text-danger flex-shrink-0" />
+                <span className="text-base font-bold text-danger">URGENCE</span>
               </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Niveau de risque */}
-        <Card className={`${config.bgColor} ${config.borderColor} border`}>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <IconComponent className={`h-5 w-5 text-${config.color}`} />
-              {config.title}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Score de risque</span>
-              <Badge variant="outline">{result.score}%</Badge>
-            </div>
-            <Progress value={result.score} className="h-2" />
-            
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Taux d'incertitude</span>
-              <Badge variant="outline">{result.uncertaintyRate}%</Badge>
-            </div>
-            <Progress value={result.uncertaintyRate} className="h-2" />
-
-            {result.uncertaintyRate > 40 && (
-              <div className="p-3 bg-warning/10 border border-warning/20 rounded-lg">
-                <p className="text-sm text-warning">
-                  ⚠️ Taux d'incertitude élevé - Consultez un professionnel pour un diagnostic précis
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Symptômes critiques détectés */}
-        {result.criticalSymptoms.length > 0 && (
-          <Card className="bg-danger/10 border-danger/20 border">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-danger">
-                <AlertTriangle className="h-5 w-5" />
-                Symptômes critiques détectés
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                {result.criticalSymptoms.map((symptom, index) => (
-                  <li key={index} className="text-sm flex items-start gap-2">
-                    <span className="text-danger">•</span>
-                    {symptom}
-                  </li>
-                ))}
-              </ul>
+              <p className="text-sm mb-3 leading-relaxed">{result.emergencyAlert}</p>
+              {result.riskLevel === 'red' && result.criticalSymptoms.length > 0 && (
+                <div className="flex items-center gap-2 p-2 bg-danger/5 rounded-lg">
+                  <Phone className="h-3 w-3 text-danger flex-shrink-0" />
+                  <span className="font-medium text-danger text-sm">
+                    Urgences vétérinaires : 3115
+                  </span>
+                </div>
+              )}
             </CardContent>
           </Card>
         )}
-      </div>
 
-      {/* Recommandations */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-primary" />
-            Recommandations personnalisées
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-3">
-            {result.recommendations.map((recommendation, index) => (
-              <div key={index} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                <span className="text-primary">•</span>
-                <span className="text-sm">{recommendation}</span>
+      <div className="space-y-4">
+          {/* Niveau de risque */}
+          <Card className={`${config.bgColor} ${config.borderColor} border shadow-sm`}>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <IconComponent className={`h-4 w-4 text-${config.color} flex-shrink-0`} />
+                {config.title}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">Score de risque</span>
+                <Badge variant="outline" className="text-xs">{result.score}%</Badge>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              <Progress value={result.score} className="h-1.5" />
+              
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">Taux d'incertitude</span>
+                <Badge variant="outline" className="text-xs">{result.uncertaintyRate}%</Badge>
+              </div>
+              <Progress value={result.uncertaintyRate} className="h-1.5" />
+
+              {result.uncertaintyRate > 40 && (
+                <div className="p-2 bg-warning/10 border border-warning/20 rounded-lg">
+                  <p className="text-xs text-warning leading-tight">
+                    ⚠️ Taux d'incertitude élevé - Consultez un professionnel
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Symptômes critiques détectés */}
+          {result.criticalSymptoms.length > 0 && (
+            <Card className="bg-danger/10 border-danger/20 border shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-danger text-base">
+                  <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+                  Symptômes critiques
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-1">
+                  {result.criticalSymptoms.map((symptom, index) => (
+                    <li key={index} className="text-xs flex items-start gap-2">
+                      <span className="text-danger mt-0.5">•</span>
+                      <span className="leading-tight">{symptom}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
+        {/* Recommandations */}
+        <Card className="shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Heart className="h-4 w-4 text-primary flex-shrink-0" />
+              Recommandations personnalisées
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {result.recommendations.map((recommendation, index) => (
+                <div key={index} className="flex items-start gap-2 p-2 bg-muted/50 rounded-lg">
+                  <span className="text-primary mt-0.5 flex-shrink-0">•</span>
+                  <span className="text-sm leading-tight">{recommendation}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
       {/* Patterns dangereux détectés */}
       {result.dangerousPatterns.length > 0 && (
@@ -260,20 +266,21 @@ export const DiagnosticResult = ({ result, profile, onRestart }: DiagnosticResul
         </CardContent>
       </Card>
 
-      {/* Actions */}
-      <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-6">
-        <Button onClick={onRestart} variant="outline" className="gap-2">
-          <RotateCcw className="h-4 w-4" />
-          Nouveau diagnostic
-        </Button>
-        <Button 
-          onClick={() => setFeedbackModalOpen(true)} 
-          variant="default" 
-          className="gap-2"
-        >
-          <Star className="h-4 w-4" />
-          Donnez votre avis
-        </Button>
+        {/* Actions */}
+        <div className="flex flex-col gap-3 pt-4">
+          <Button onClick={onRestart} variant="outline" className="w-full h-12 gap-2">
+            <RotateCcw className="h-4 w-4" />
+            Nouveau diagnostic
+          </Button>
+          <Button 
+            onClick={() => setFeedbackModalOpen(true)} 
+            variant="default" 
+            className="w-full h-12 gap-2"
+          >
+            <Star className="h-4 w-4" />
+            Donnez votre avis
+          </Button>
+        </div>
       </div>
 
       <FeedbackModal 

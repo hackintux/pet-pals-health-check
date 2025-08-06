@@ -54,63 +54,69 @@ export const AnimalProfile = ({ onProfileComplete }: AnimalProfileProps) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <div className="text-center mb-8">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
+    <div className="min-h-screen flex flex-col">
+      {/* Header mobile-optimized */}
+      <div className="sticky top-0 bg-background/95 backdrop-blur-sm border-b px-4 py-3 z-50">
+        <div className="flex items-center justify-center gap-2">
+          <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
             <img 
               src="/lovable-uploads/c4b2f9a1-854c-4005-85f9-12f9848809c5.png" 
               alt="VetoCheck Logo" 
-              className="h-8 w-8 object-contain"
+              className="h-5 w-5 object-contain"
             />
           </div>
-          <h1 className="text-3xl font-bold text-primary">VetoCheck</h1>
+          <h1 className="text-xl font-bold text-primary">VetoCheck</h1>
         </div>
-        <p className="text-lg text-muted-foreground">
-          Commençons par créer le profil de votre compagnon
-        </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <PawPrint className="h-5 w-5 text-primary" />
-            Profil de l'animal
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="name">Nom de votre animal</Label>
-              <Input
-                id="name"
-                value={profile.name || ''}
-                onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                placeholder="Ex: Médor, Félix..."
-                required
-              />
-            </div>
+      {/* Content container */}
+      <div className="flex-1 p-4 max-w-lg mx-auto w-full">
+        <div className="text-center mb-6">
+          <p className="text-base text-muted-foreground">
+            Créons le profil de votre compagnon
+          </p>
+        </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="species">Espèce</Label>
+        <Card className="shadow-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <PawPrint className="h-5 w-5 text-primary" />
+              Profil de l'animal
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-3">
+                <Label htmlFor="name" className="text-base font-medium">Nom de votre animal</Label>
+                <Input
+                  id="name"
+                  value={profile.name || ''}
+                  onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                  placeholder="Ex: Médor, Félix..."
+                  className="h-12 text-base"
+                  required
+                />
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="species" className="text-base font-medium">Espèce</Label>
                 <Select 
                   value={profile.species} 
                   onValueChange={(value: Species) => setProfile({ ...profile, species: value })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12 text-base">
                     <SelectValue placeholder="Choisir l'espèce" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="chien">🐕 Chien</SelectItem>
-                    <SelectItem value="chat">🐱 Chat</SelectItem>
+                    <SelectItem value="chien" className="text-base py-3">🐕 Chien</SelectItem>
+                    <SelectItem value="chat" className="text-base py-3">🐱 Chat</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="age">Âge</Label>
-                <div className="flex gap-2">
+              <div className="space-y-3">
+                <Label htmlFor="age" className="text-base font-medium">Âge</Label>
+                <div className="flex gap-3">
                   <Input
                     id="age"
                     type="number"
@@ -119,75 +125,77 @@ export const AnimalProfile = ({ onProfileComplete }: AnimalProfileProps) => {
                     value={ageValue || ''}
                     onChange={(e) => handleAgeChange(parseInt(e.target.value) || 0)}
                     placeholder={ageUnit === 'années' ? "Ex: 2" : "Ex: 24"}
-                    className="flex-1"
+                    className="flex-1 h-12 text-base"
                     required
                   />
                   <Select 
                     value={ageUnit} 
                     onValueChange={handleUnitChange}
                   >
-                    <SelectTrigger className="w-24">
+                    <SelectTrigger className="w-20 h-12 text-base">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="mois">mois</SelectItem>
-                      <SelectItem value="années">ans</SelectItem>
+                      <SelectItem value="mois" className="text-base">mois</SelectItem>
+                      <SelectItem value="années" className="text-base">ans</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="gender">Sexe</Label>
-              <Select 
-                value={profile.gender} 
-                onValueChange={(value: Gender) => setProfile({ ...profile, gender: value })}
+              <div className="space-y-3">
+                <Label htmlFor="gender" className="text-base font-medium">Sexe</Label>
+                <Select 
+                  value={profile.gender} 
+                  onValueChange={(value: Gender) => setProfile({ ...profile, gender: value })}
+                >
+                  <SelectTrigger className="h-12 text-base">
+                    <SelectValue placeholder="Choisir le sexe" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male" className="text-base py-3">♂️ Mâle</SelectItem>
+                    <SelectItem value="femelle" className="text-base py-3">♀️ Femelle</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3 p-3 bg-muted/30 rounded-lg">
+                  <Checkbox
+                    id="neutered"
+                    checked={profile.isNeutered || false}
+                    onCheckedChange={(checked) => setProfile({ ...profile, isNeutered: checked as boolean })}
+                    className="mt-0.5"
+                  />
+                  <Label htmlFor="neutered" className="text-base font-medium leading-relaxed cursor-pointer flex-1">
+                    Mon animal est stérilisé/castré
+                  </Label>
+                </div>
+
+                <div className="flex items-start space-x-3 p-3 bg-muted/30 rounded-lg">
+                  <Checkbox
+                    id="overweight"
+                    checked={profile.isOverweight || false}
+                    onCheckedChange={(checked) => setProfile({ ...profile, isOverweight: checked as boolean })}
+                    className="mt-0.5"
+                  />
+                  <Label htmlFor="overweight" className="text-base font-medium leading-relaxed cursor-pointer flex-1">
+                    Mon animal est en surpoids
+                  </Label>
+                </div>
+              </div>
+
+              <Button 
+                type="submit" 
+                className="w-full h-12 text-base font-semibold" 
+                disabled={!isProfileComplete()}
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="Choisir le sexe" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="male">♂️ Mâle</SelectItem>
-                  <SelectItem value="femelle">♀️ Femelle</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="neutered"
-                  checked={profile.isNeutered || false}
-                  onCheckedChange={(checked) => setProfile({ ...profile, isNeutered: checked as boolean })}
-                />
-                <Label htmlFor="neutered" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Mon animal est stérilisé/castré
-                </Label>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="overweight"
-                  checked={profile.isOverweight || false}
-                  onCheckedChange={(checked) => setProfile({ ...profile, isOverweight: checked as boolean })}
-                />
-                <Label htmlFor="overweight" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Mon animal est en surpoids
-                </Label>
-              </div>
-            </div>
-
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={!isProfileComplete()}
-            >
-              Commencer le diagnostic
-            </Button>
+                Commencer le diagnostic
+              </Button>
           </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
